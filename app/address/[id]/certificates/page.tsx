@@ -1,6 +1,6 @@
 import Profile from '@/pages/Profile'
-export default function pages() {
+export default function page() {
   return (
-    <Profile/>
+        <Profile/>
   )
 }

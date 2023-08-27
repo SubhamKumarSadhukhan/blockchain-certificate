@@ -1,9 +1,12 @@
+"use client";
+import { useRouter } from 'next/navigation';
 type Props = {
     name: string,
     description: string,
 }
 
 export default function index({name,description}: Props) {
+  const router = useRouter();
   return (
     <div className="w-full">
         <div className="card w-full glass h-60">
@@ -12,7 +15,7 @@ export default function index({name,description}: Props) {
                 <h2 className="card-title">{name}</h2>
                 <p>{description}</p>
                 <div className="card-actions justify-end">
-                <button className="btn btn-primary">Generate Certificate</button>
+                <button onClick={()=>router.push(`/events/${name}/createCertificate`)} className="btn btn-primary">Generate Certificate</button>
                 </div>
             </div>
         </div>

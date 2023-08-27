@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from 'next/navigation'
 import EventCard from '@/components/EventCard'
 type Props = {}
 const s = [
@@ -39,12 +41,13 @@ const s = [
 ]
 
 export default function index({}: Props) {
+    const router = useRouter();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-6">
         <div className="mockup-browser border bg-base-300 w-full">
             <div className="mockup-browser-toolbar">
                 <input type="text" placeholder="Event name" className="input py-6" />
-                <button className="btn btn-primary">Create Event</button>
+                <button onClick={()=>router.push('/events/createEvent')} className="btn btn-primary">Create Event</button>
             </div>
             {/* <div className="flex justify-center px-4 py-16 bg-base-200"> */}
                 <div className="flex justify-center px-4 py-16 min-h-screen bg-base-200 rounded-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2">

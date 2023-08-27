@@ -3,6 +3,7 @@ import './globals.css'
 // import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
@@ -41,6 +42,7 @@ export default function RootLayout({
           <Header/>
           <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
           {children}
+          <Footer/>
         </WagmiConfig>
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
         </body>

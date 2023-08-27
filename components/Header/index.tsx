@@ -1,12 +1,13 @@
 "use client";
 import { Web3Button } from '@web3modal/react'
-
+import { useAccount } from 'wagmi';
 import './Header.scss'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 
 export default function Header() {
       const router = useRouter();
+      const { address,isConnected } = useAccount();
 
 
     return (
@@ -18,7 +19,7 @@ export default function Header() {
                 </label>
                 <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                     <li><Link href="/">Home</Link></li>
-                    <li><Link href="/profile">Your certificates</Link></li>
+                    {isConnected?<li><Link href={`/address/${address}/certificates`}>Your certificates</Link></li>:null}
                     <li><Link href="/events">Events</Link></li>
                     <li><Link href="/about">About</Link></li>
                     {/* <li>
@@ -35,7 +36,7 @@ export default function Header() {
             <div className="navbar-center hidden lg:flex p-2">
                 <ul className="menu menu-horizontal px-1 mx-3">
                     <li><Link href="/" replace>Home</Link></li>
-                    <li><Link href="/profile" replace>Your certificates</Link></li>
+                    {isConnected?<li><Link href={`/address/${address}/certificates`}>Your certificates</Link></li>:null}
                     <li><Link href="/events">Events</Link></li>
                     <li><a onClick={()=>router.push('/about')}>About</a></li>
                 {/* <li tabIndex={0}>

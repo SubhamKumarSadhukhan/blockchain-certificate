@@ -1,6 +1,8 @@
 
 export default function Avout() {
   return (
-    <div>index</div>
+    <div className="min-h-screen">
+      This is the About page
+    </div>
   )
 }
