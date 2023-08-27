@@ -1,4 +1,4 @@
-{
+{  
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -22,6 +22,20 @@
       "@/*": ["./*"]
     }
   },
+  "theme": {
+    "extend": {
+      "colors": {
+        "primary": "#FF6363",
+        "secondary": {
+          "100": "#E2E2D5",
+          "200": "#888883"
+        }
+      },
+      "fontFamily": {
+        "body": ["Nunito"]
+      }
+    }
+  },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

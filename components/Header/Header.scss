@@ -1,0 +1,19 @@
+.header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 64px;
+    z-index: 100;
+
+    @media (max-width: 680px) {
+        padding: 12px;
+        gap: 15px;
+    }
+
+    a {
+        img {
+            width: 70px;
+        }
+    }
+}
