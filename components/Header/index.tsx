@@ -18,7 +18,7 @@ export default function Header() {
                 </label>
                 <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                     <li><Link href="/">Home</Link></li>
-                    <li><Link href="/profile">Profile</Link></li>
+                    <li><Link href="/profile">Your certificates</Link></li>
                     <li><Link href="/events">Events</Link></li>
                     <li><Link href="/about">About</Link></li>
                     {/* <li>
@@ -35,7 +35,7 @@ export default function Header() {
             <div className="navbar-center hidden lg:flex p-2">
                 <ul className="menu menu-horizontal px-1 mx-3">
                     <li><Link href="/" replace>Home</Link></li>
-                    <li><Link href="/profile" replace>Profile</Link></li>
+                    <li><Link href="/profile" replace>Your certificates</Link></li>
                     <li><Link href="/events">Events</Link></li>
                     <li><a onClick={()=>router.push('/about')}>About</a></li>
                 {/* <li tabIndex={0}>
