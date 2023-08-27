@@ -67,9 +67,9 @@ export default function EventForm (props:any) {
   });
 
   return (
-    <div className="p-4 md:w-auto">
+    <div className="p-4 card flex-shrink-0 w-full max-w-md shadow-2xl bg-base-100 mx-auto">
         <h1 className="text-3xl font-semibold text-center text-gray-700">Create Certificate</h1>
-      <form onSubmit={formik.handleSubmit} className="space-y-4">
+      <form onSubmit={formik.handleSubmit} className="card-body space-y-4">
         <div>
           <label htmlFor="name" className="font-semibold">Name</label>
           <input
