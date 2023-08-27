@@ -30,7 +30,7 @@ export default function Header() {
                     </li> */}
                 </ul>
                 </div>
-                <a className="btn btn-ghost normal-case text-xl">Certtificate generator</a>
+                <a className="btn btn-ghost normal-case text-xl">Certificate generator</a>
             </div>
             <div className="navbar-center hidden lg:flex p-2">
                 <ul className="menu menu-horizontal px-1 mx-3">
