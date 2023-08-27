@@ -42,6 +42,7 @@ interface FormData {
         .default(0)
         .required('Required'),
     gender: Yup.mixed().oneOf(Object.keys(Gender)).required('Required'),
+    grade: Yup.number().min(0).max(100,'Percentage cannot be greater than 100').required()
  });
 
 
@@ -160,7 +161,7 @@ export default function EventForm (props:any) {
           {formik.touched.uniqueId && formik.errors.uniqueId && <div className="text-red-500">{formik.errors.uniqueId}</div>}
         </div>
         <div>
-          <label htmlFor="grade" className="font-semibold">Grade</label>
+          <label htmlFor="grade" className="font-semibold">Grade (%)</label>
           <input
             type="number"
             id="grade"
