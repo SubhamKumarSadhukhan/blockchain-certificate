@@ -44,11 +44,8 @@ interface FormData {
     gender: Yup.mixed().oneOf(Object.keys(Gender)).required('Required'),
  });
 
-interface EventFormProps {
-  onSubmit: (formData: FormData) => void;
-}
 
-const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
+export default function EventForm (props:any) {
   const initialValues: FormData = {
     name: '',
     description: '',
@@ -65,7 +62,7 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
     initialValues,
     validationSchema: SignupSchema,
     onSubmit: (values) => {
-      onSubmit(values);
+      props.onSubmit(values);
     },
   });
 
@@ -180,5 +177,3 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
     </div>
   );
 };
-
-export default EventForm;
