@@ -4,36 +4,55 @@ import CERTIFICATEABI from '@/lib/contracts/CERTIFICATEABI.json'
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useAccount } from 'wagmi';
+import { multicall } from 'wagmi/actions';
+import { toast } from 'react-toastify';
 interface Event {
   name: string;
   description: string;
   duration: number;
+  image: string;
+  validTill: number;
+  uniqueId: string;
+  grade: number;
+  gender: number;
+  eventName: string;
+  tokenId: number;
+  date: number;
 }
 export default function Profile() {
   const router: any = useParams();
-  const [state,setState]=useState([]);
+  const [state,setState]=useState<any>([]);
   const { isConnected } = useAccount();
-  async function getCertificate() {
-    const data:any= await readContract({
-  address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
-  abi: CERTIFICATEABI,
-  functionName: 'getCertificatesTokenIds',
-  args: [router.id]
-     });
-  const cert=[];
-  for (const i in data){
-    cert.push(readContract({
-  address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
-  abi: CERTIFICATEABI,
-  functionName: 'getCertificateDetails',
-  args: [data[i]]
-     }));
-    }
-  let s:any=(await Promise.all(cert));
-  setState(s);
-  }
-
+  
   useEffect(() => {
+    async function getCertificate() {
+    try{
+      console.log("router",router);
+    const tokenIds:any = await readContract({
+      address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
+      abi: CERTIFICATEABI,
+      functionName: 'getCertificatesTokenIds',
+      args: [router.id]
+     });
+     console.log("tokenIds",tokenIds);
+     const multicallQuery = tokenIds.map((tokenId: number) => ({
+      address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
+      abi: CERTIFICATEABI,
+      functionName: 'getCertificateDetails',
+      args: [tokenId
+      ]
+     }));
+     const data = await multicall({contracts:multicallQuery});
+     console.log("data",data);
+     const result: Event[] = [];
+     data.forEach((item:any) => {
+      if(item.status=="success") result.push(item.result);
+      });
+      setState(result);
+      }catch(e){
+        console.log(e);
+      }
+    }
     if(isConnected)
     getCertificate()
     },[isConnected])
@@ -47,10 +66,10 @@ export default function Profile() {
                     <div className="card w-full glass h-60">
                         <div className="card-body">
                             <h2 className="card-title">{event.name}</h2>
-                            <p>Madhyamik-2021</p>
+                            <p>{event.description}</p>
                             <div className="card-actions justify-items-center">
                                 <button className="btn btn-primary">View Details</button>
-                                <button className="btn btn-primary">Share</button>
+                                <button onClick={()=>{navigator.clipboard.writeText(event.image);toast.success("Link copied")}} className="btn btn-primary">Share</button>
                             </div>
                         </div>
                     </div>)}
