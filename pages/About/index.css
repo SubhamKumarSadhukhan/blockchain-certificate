@@ -1,0 +1,8 @@
+.para{
+    border-style: solid;
+    border-radius: 10px;
+    border-color: hotpink;
+    border-width: medium;
+    padding: 10px;
+    font-size: large;
+}
