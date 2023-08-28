@@ -11,6 +11,7 @@ export default function Header() {
 
 
     return (
+        <>
         <div className="navbar bg-default px-6">
             <div className="navbar-start">
                 <div className="dropdown">
@@ -19,7 +20,7 @@ export default function Header() {
                 </label>
                 <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                     <li><Link href="/">Home</Link></li>
-                    {isConnected?<li><Link href={`/address/${address}/certificates`}>Your certificates</Link></li>:null}
+                    <li><Link href={`/address/${address}/certificates`}>Your certificates</Link></li>
                     <li><Link href="/events">Events</Link></li>
                     <li><Link href="/about">About</Link></li>
                     {/* <li>
@@ -36,18 +37,9 @@ export default function Header() {
             <div className="navbar-center hidden lg:flex p-2">
                 <ul className="menu menu-horizontal px-1 mx-3">
                     <li><Link href="/" replace>Home</Link></li>
-                    {isConnected?<li><Link href={`/address/${address}/certificates`}>Your certificates</Link></li>:null}
+                    <li><Link href={`/address/${address}/certificates`}>Your certificates</Link></li>
                     <li><Link href="/events">Events</Link></li>
-                    <li><a onClick={()=>router.push('/about')}>About</a></li>
-                {/* <li tabIndex={0}>
-                    <details>
-                    <summary>Parent</summary>
-                    <ul className="p-2">
-                        <li><a>Submenu 1</a></li>
-                        <li><a>Submenu 2</a></li>
-                    </ul>
-                    </details>
-                </li> */}
+                    <li><Link href="/about">About</Link></li>
                 </ul>
             </div>
             <div className="navbar-end">
@@ -55,6 +47,7 @@ export default function Header() {
                 <Web3Button />
             </div>
         </div>
+        </>
     )
 }
 

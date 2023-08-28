@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
-interface EventFormProps {
-  onSubmit: (formData: FormData) => void;
-}
-
+import { writeContract } from '@wagmi/core'
+import CERTIFICATEABI from '@/lib/contracts/CERTIFICATEABI.json'
 interface FormData {
   eventName: string;
   ownerAddress: string;
@@ -22,15 +19,21 @@ const EventCreateSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
+const EventForm = () => {
   const initialValues: FormData = {
     eventName: '',
     ownerAddress: '',
   };
   async function createEvent(formData: FormData) {
-    const { eventName, ownerAddress } = formData;
-    console.log(eventName, ownerAddress);
-  }
+    console.log(formData);
+    const data= await writeContract({
+  address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
+  abi: CERTIFICATEABI,
+  functionName: 'createEvent',
+  args:[formData.ownerAddress,formData.eventName]
+     });
+     console.log("data",data);
+    }
   const formik = useFormik({
     initialValues,
     validationSchema: EventCreateSchema,
@@ -62,9 +65,9 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit }) => {
               </label>
             </div>
             <div className="md:w-2/3">
-              <input value={formik.values.eventName} name="ownerAddress" onChange={formik.handleChange} className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" placeholder="0x.................." />
+              <input value={formik.values.ownerAddress} name="ownerAddress" onChange={formik.handleChange} className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" placeholder="0x.................." />
             </div>
-            {formik.touched.eventName && formik.errors.ownerAddress && <div className="text-red-500">{formik.errors.ownerAddress}</div>}
+            {formik.touched.ownerAddress && formik.errors.ownerAddress && <div className="text-red-500">{formik.errors.ownerAddress}</div>}
           </div>
           <div className="md:flex md:items-center">
             <div className="md:w-1/3"></div>

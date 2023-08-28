@@ -1,11 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation';
-type Props = {
-    name: string,
-    description: string,
-}
 
-export default function index({name,description}: Props) {
+export default function index({name}: any) {
   const router = useRouter();
   return (
     <div className="w-full">
@@ -13,7 +9,6 @@ export default function index({name,description}: Props) {
             {/* <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure> */}
             <div className="card-body">
                 <h2 className="card-title">{name}</h2>
-                <p>{description}</p>
                 <div className="card-actions justify-end">
                 <button onClick={()=>router.push(`/events/${name}/createCertificate`)} className="btn btn-primary">Generate Certificate</button>
                 </div>

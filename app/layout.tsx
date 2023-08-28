@@ -2,14 +2,19 @@
 import './globals.css'
 // import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Header from '@/components/Header'
+// import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { arbitrum, mainnet, polygon } from 'wagmi/chains'
-const chains = [arbitrum, mainnet, polygon]
+import { goerli } from 'wagmi/chains'
+import dynamic from 'next/dynamic'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+const chains = [goerli]
 const projectId = '3aad51954bc9beedced7e487b5802f04'
+const Header = dynamic(() => import('@/components/Header'), { ssr: false })
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiConfig = createConfig({
@@ -31,20 +36,16 @@ export default function RootLayout({
   children: any
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@3.6.2/dist/full.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.tailwindcss.com"></script>
-      </head>
-
+    <html lang="en" data-theme="dark">
       <body className={inter.className}>
         <WagmiConfig config={wagmiConfig}>
           <Header/>
           <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
           {children}
           <Footer/>
-        </WagmiConfig>
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        </WagmiConfig>
+        <ToastContainer/>
         </body>
     </html>
   )

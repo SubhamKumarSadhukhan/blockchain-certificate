@@ -1,23 +1,27 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useParams } from 'next/navigation';
+import { writeContract } from 'wagmi/actions';
+import CERTIFICATEABI from '@/lib/contracts/CERTIFICATEABI.json'
+import { toast } from 'react-toastify';
 
 enum Gender {
-  Male = 0,
-  Female = 1,
-  Other = 2,
+  Male = "Male",
+  Female = "Female",
+  Other = "Other",
 }
 
 interface FormData {
   name: string;
   description: string;
-  eventName: string;
   duration: number;
   validTill: number;
-  gender: number;
+  gender: string;
   uniqueId: string;
   grade: number;
+  to: string;
 }
 
  const SignupSchema = Yup.object().shape({
@@ -29,10 +33,6 @@ interface FormData {
      .min(5, 'Too Short!')
      .max(50, 'Too Long!')
      .required('Required'),
-   eventName: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
     duration: Yup.number()
         .min(0, 'Too Short!')
         .default(0)
@@ -41,20 +41,23 @@ interface FormData {
         .min(0, 'Cannot be negative')
         .default(0)
         .required('Required'),
-    gender: Yup.mixed().oneOf(Object.keys(Gender)).required('Required'),
+    gender: Yup.mixed().oneOf(["Male","Female","Other"]).required('Required'),
+    to: Yup.string().required('Required'),
  });
 
 
 export default function EventForm () {
+  const router: any = useParams();
+  const [loading,setLoading]=useState<boolean>(false);
   const initialValues: FormData = {
     name: '',
     description: '',
-    eventName: '',
     duration: 0,
     validTill: 0,
     gender: Gender.Male,
     uniqueId: '',
     grade: 0,
+    to: ''
   };
 
 
@@ -66,7 +69,45 @@ export default function EventForm () {
     },
   });
   async function createCertificate(formData: FormData) {
-    console.log(formData);
+    try{
+      setLoading(true);
+      toast.loading("Creating Certificate");
+  const gender=(formData.gender=='Male')?0:formData.gender=="Female"?1:2;
+  const year=new Date().getFullYear();
+  const month=new Date().getMonth();
+  const day=new Date().getDate();
+
+  const response=await fetch('https://ipfs-phdr.onrender.com/generate/',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: formData.name,
+      event: router.eventname,
+      doi: day,
+      moi: month,
+      yoi: year,
+  })
+})  
+const respons=await response.json();
+const ipfsHash=`ipfs://${respons}`;
+const data = await writeContract({
+address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
+  abi: CERTIFICATEABI,
+  functionName: 'generateCertificate',
+  args: [
+      formData.grade,formData.duration,formData.validTill,gender,router.eventname,formData.name,formData.description,ipfsHash,formData.uniqueId,formData.to
+  ],
+});
+    toast.dismiss();
+    toast.info("Certificate Createing in progress");
+    }catch(e){
+      console.log(e);
+      toast.dismiss();
+      setLoading(false);
+      toast.error("Error in creating certificate");
+    }
   }
 
   return (
@@ -101,26 +142,12 @@ export default function EventForm () {
           />
           {formik.touched.description && formik.errors.description && <div className="text-red-500">{formik.errors.description}</div>}
         </div>
-        <div>
-          <label htmlFor="eventName" className="font-semibold">Event Name</label>
-          <input
-            type="text"
-            id="eventName"
-            name="eventName"
-            value={formik.values.eventName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="input input-bordered w-full"
-            placeholder="Enter Event name"
-          />
-          {formik.touched.eventName && formik.errors.eventName && <div className="text-red-500">{formik.errors.eventName}</div>}
-        </div>
         <select id='gender' name='gender' onChange={formik.handleChange} onBlur={formik.handleBlur} className="select select-warning w-full max-w-xs">
             {/* onBlur={formik.handleBlur} className="select select-warning w-full max-w-xs"> */}
             <option disabled selected>Select Gender</option>
-            <option value={0}>Male</option>
-            <option value={1}>Female</option>
-            <option value={2}>Other</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
         </select>
         {formik.touched.gender && formik.errors.gender && <div className="text-red-500">{formik.errors.gender}</div>}
         <div>
@@ -139,7 +166,7 @@ export default function EventForm () {
         <div>
           <label htmlFor="validTill" className="font-semibold">Valid till</label>
           <input
-            type="text"
+            type="number"
             id="validTill"
             name="validTill"
             onChange={formik.handleChange}
@@ -175,7 +202,20 @@ export default function EventForm () {
           />
           {formik.touched.grade && formik.errors.grade && <div className="text-red-500">{formik.errors.grade}</div>}
         </div>
-        <button type="submit" className="btn btn-primary w-full">Submit</button>
+        <div>
+          <label htmlFor="to" className="font-semibold">To Address</label>
+          <input
+            type="text"
+            id="to"
+            name="to"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="input input-bordered w-full"
+            placeholder="Address of the person to whom certificate is to be issued"
+          />
+          {formik.touched.to && formik.errors.to && <div className="text-red-500">{formik.errors.to}</div>}
+        </div>
+        <button disabled={loading} type="submit" className="btn btn-primary w-full">Submit</button>
       </form>
     </div>
   );

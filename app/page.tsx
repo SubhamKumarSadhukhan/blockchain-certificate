@@ -1,6 +1,21 @@
-import Homes from "@/pages/Home";
+"use client";
+import Hero from "@/components/Hero";
+import { w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { goerli } from 'wagmi/chains'
+const chains = [goerli]
+const projectId = '3aad51954bc9beedced7e487b5802f04'
+
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+})
 export default function Home() {
   return (
-    <Homes/>
+    <WagmiConfig config={wagmiConfig}>
+      <Hero/>
+    </WagmiConfig>
   )
 }
