@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import { multicall } from 'wagmi/actions';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import WalletConnectRequired from '@/pages/WalletConnectRequired';
 interface Event {
   name: string;
   description: string;
@@ -23,6 +25,7 @@ export default function Profile() {
   const router: any = useParams();
   const [state,setState]=useState<any>([]);
   const { isConnected } = useAccount();
+  const navigation = useRouter();
   
   useEffect(() => {
     async function getCertificate() {
@@ -57,6 +60,7 @@ export default function Profile() {
     getCertificate()
     },[isConnected])
   return (
+    <>{isConnected?
     <main className="flex min-h-screen flex-col items-center justify-between p-6">
         <div className="mockup-browser border bg-base-300 w-full">
             <div className="mockup-browser-toolbar">
@@ -68,14 +72,17 @@ export default function Profile() {
                             <h2 className="card-title">{event.name}</h2>
                             <p>{event.description}</p>
                             <div className="card-actions justify-items-center">
-                                <button className="btn btn-primary">View Details</button>
-                                <button onClick={()=>{navigator.clipboard.writeText(event.image);toast.success("Link copied")}} className="btn btn-primary">Share</button>
+                                <button className="btn btn-primary" onClick={()=>navigation.push(`/token/${event.tokenId}`)}>View Details</button>
+                                <button onClick={()=>{
+                                  navigator.clipboard.writeText(window.location.host+`/token/${event.tokenId}`);
+                                  toast.success("Link copied")}} className="btn btn-primary">Share</button>
                             </div>
                         </div>
                     </div>)}
                 </div>
         </div>
-    </main>
+    </main>:<WalletConnectRequired/>}
+    </>
   )
 }
 

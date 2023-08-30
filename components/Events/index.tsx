@@ -5,12 +5,13 @@ import CERTIFICATEABI from '@/lib/contracts/CERTIFICATEABI.json'
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
+import WalletConnectRequired from "@/pages/WalletConnectRequired";
 type Props = {}
 
 export default function index({}: Props) {
     const router: any = useRouter();
     const [events, setEvents] = useState([]);
-    const { address } = useAccount();
+    const { address,isConnected } = useAccount();
     const [state, setState] = useState("");
     useEffect(() => {
         if (address) {
@@ -29,10 +30,12 @@ export default function index({}: Props) {
     setEvents(data);
     }
   useEffect(() => {
+    if(isConnected)
     getEvents()
-    },[])
+    },[isConnected])
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-6">
+    <>
+    {isConnected?<main className="flex min-h-screen flex-col items-center justify-between p-6">
         <div className="mockup-browser border bg-base-300 w-full">
             <div className="mockup-browser-toolbar">
                 <input type="text" placeholder="Event name" className="input py-6" />
@@ -44,6 +47,7 @@ export default function index({}: Props) {
             {/* </div> */}
             </div>
         </div>
-    </main>
+    </main>:<WalletConnectRequired/>}
+    </>
   )
 }
