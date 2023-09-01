@@ -52,6 +52,8 @@ export default function index() {
         {state.validTill?<>validTill: {state.validTill}<br/></>:null}
         {state.grade?<>grade: {state.grade}<br/></>:null}
         issued to: {state.owner}<br/>
+        token id: {String(state.tokenId)}<br/>
+        unique id: {state.uniqueId}<br/>
         {state.image&&<img src={`https://ipfs.io/ipfs/${state.image.split('/')[2]}`} width={400} height={400} alt={""} />}
     </main>:<WalletConnectRequired/>}
     </>

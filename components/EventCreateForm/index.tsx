@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { writeContract } from '@wagmi/core'
 import CERTIFICATEABI from '@/lib/contracts/CERTIFICATEABI.json'
+import { toast } from 'react-toastify';
 interface FormData {
   eventName: string;
   ownerAddress: string;
@@ -25,14 +26,20 @@ const EventForm = () => {
     ownerAddress: '',
   };
   async function createEvent(formData: FormData) {
-    console.log(formData);
+    try{
+      toast.loading("Creating event");
     const data= await writeContract({
   address: "0xEaf8bE7cd839af2Bd428295B52E54f72Ac661922",
   abi: CERTIFICATEABI,
   functionName: 'createEvent',
   args:[formData.ownerAddress,formData.eventName]
      });
-     console.log("data",data);
+     
+    }catch(e){
+      toast.dismiss();
+      toast.error("Error creating event");
+      console.log("e",e);
+    }
     }
   const formik = useFormik({
     initialValues,
