@@ -47,7 +47,7 @@ export default function index() {
     <main className="flex min-h-screen flex-col items-center justify-between p-6">
         name: {state.name}<br/>
         description: {state.description}<br/>
-        duration: {state.duration}<br/>
+        duration: {state.duration} hours<br/>
         gender: {state.gender==0?"Male":state.gender==1?"Female":"Other"}<br/>
         {state.validTill?<>validTill: {state.validTill}<br/></>:null}
         {state.grade?<>grade: {state.grade}<br/></>:null}
