@@ -51,9 +51,8 @@ export default function index() {
         gender: {state.gender==0?"Male":state.gender==1?"Female":"Other"}<br/>
         {state.validTill?<>validTill: {state.validTill}<br/></>:null}
         {state.grade?<>grade: {state.grade}<br/></>:null}
-        date: {state.date}<br/>
         issued to: {state.owner}<br/>
-        {state.image&&<img src={`https://orange-arbitrary-penguin-215.mypinata.cloud/ipfs/${state.image.split('/')[2]}`} width={400} height={400} alt={""} />}
+        {state.image&&<img src={`https://ipfs.io/ipfs/${state.image.split('/')[2]}`} width={400} height={400} alt={""} />}
     </main>:<WalletConnectRequired/>}
     </>
   )
